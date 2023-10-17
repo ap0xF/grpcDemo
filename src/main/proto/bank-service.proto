@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.aadit.models";
+
+ message BalacneCheckRequest {
+   int32 account_number = 1;
+ }
+
+
+ // NPR
+ message Balance{
+   int32 amount = 1;
+ }
+
+ message WithdrawRequest {
+   int32 account_number = 1;
+   int32 amount = 2;
+ }
+
+ message Money{
+   int32 value = 1;
+ }
+
+ message DepositRequest {
+   int32 account_number = 1;
+   int32 amount = 2;
+ }
+
+ message DepositResponse{
+   string deposit_status_check = 1;
+   int32 account_number = 2;
+   int32 amount = 3;
+ }
+
+
+
+ service BankService{
+   //UNARY
+   rpc getBalance(BalacneCheckRequest) returns (Balance);
+
+   // Server-Side Streaming
+   rpc withdraw(WithdrawRequest) returns(stream Money);
+
+   // Client-side Streaming
+   rpc deposit(stream DepositRequest) returns (Money);
+
+   // Bi-directional streaming
+   rpc depositBiDir(stream DepositRequest) returns (stream DepositResponse);
+ }
